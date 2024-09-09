@@ -25,6 +25,12 @@ $(document).ready(function () {
                     display: function (data) {
                         return '<button onclick="window.location.href=\'' + urlAlteracao + '/' + data.record.Id + '\'" class="btn btn-primary btn-sm">Alterar</button>';
                     }
+                },
+                Excluir: {
+                    title: '',
+                    display: function (data) {
+                        return '<button onclick="deletarCliente(\'' + data.record.Id + '\')" class="btn btn-primary btn-sm">Excluir</button>';
+                    }
                 }
             }
         });
@@ -33,3 +39,24 @@ $(document).ready(function () {
     if (document.getElementById("gridClientes"))
         $('#gridClientes').jtable('load');
 })
+
+function deletarCliente(id) {
+    $.ajax({
+        url: urlDelCliente,
+        method: "POST",
+        data: {
+            "ID": id
+        },
+        error:
+            function (r) {
+                if (r.status == 400)
+                    ModalDialog("Ocorreu um erro", r.responseJSON);
+                else if (r.status == 500)
+                    ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
+            },
+        success:
+            function (r) {
+                location.reload();
+            }
+    });
+}

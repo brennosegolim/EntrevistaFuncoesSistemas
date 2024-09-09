@@ -4,7 +4,13 @@
 }
 @section scripts{
     <script>
-        var urlPost = '@Url.Action("Incluir", "Cliente", new { area = "" })';
+        var urlPost        = '@Url.Action("Incluir", "Cliente", new { area = "" })';
+        var urlPostBen     = '@Url.Action("Incluir", "Beneficiario", new { area = "" })';
+        var urlAltBen      = '@Url.Action("AlterarBeneficiario", "Beneficiario", new { area = "" })';
+        var urlAltConsBen  = '@Url.Action("AlterarConsulta", "Beneficiario", new { area = "" })';
+        var urlDelBen      = '@Url.Action("Excluir", "Beneficiario", new { area = "" })';
+        var urlListBen     = '@Url.Action("Listar", "Beneficiario", new { area = "" })';
+        var urlNextID      = '@Url.Action("GetNextID", "Cliente", new { area = "" })'
     </script>
     @Scripts.Render("~/bundles/clientes")
 }

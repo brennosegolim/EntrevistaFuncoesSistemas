@@ -1,0 +1,12 @@
+
+@{
+    ViewBag.Title = "Cadastrar Beneficiario";
+}
+@section scripts{
+    <script>
+        var urlPostBen = '@Url.Action("Incluir", "Beneficiario", new { area = "" })';
+    </script>
+    @Scripts.Render("~/bundles/clientes")
+}
+<h2>@Html.Raw(ViewBag.Title)</h2>
+@Html.Partial("Forms")

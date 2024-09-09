@@ -1,6 +1,7 @@
 ﻿using FI.AtividadeEntrevista.DML;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace FI.AtividadeEntrevista.DAL
@@ -37,7 +38,7 @@ namespace FI.AtividadeEntrevista.DAL
         }
 
         /// <summary>
-        /// Inclui um novo cliente
+        /// Consultar clientes
         /// </summary>
         /// <param name="cliente">Objeto de cliente</param>
         internal DML.Cliente Consultar(long Id)
@@ -161,6 +162,16 @@ namespace FI.AtividadeEntrevista.DAL
             }
 
             return lista;
+        }
+
+        internal long GetNextID()
+        {
+            DataSet ds = base.Consultar("FI_SP_GetClienteNextID", new List<SqlParameter>());
+
+            long ret = 0;
+            if (ds.Tables[0].Rows.Count > 0)
+                long.TryParse(ds.Tables[0].Rows[0][0].ToString(), out ret);
+            return ret;
         }
     }
 }

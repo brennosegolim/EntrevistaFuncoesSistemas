@@ -67,5 +67,29 @@ namespace FI.AtividadeEntrevista.DAL
             return ds;
         }
 
+        internal DataSet Consultar(string commandSQL)
+        {
+            SqlCommand comando = new SqlCommand();
+            SqlConnection conexao = new SqlConnection(stringDeConexao);
+
+            comando.Connection = conexao;
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.CommandText = commandSQL;
+
+            SqlDataAdapter adapter = new SqlDataAdapter(comando);
+            DataSet ds = new DataSet();
+            conexao.Open();
+
+            try
+            {
+                adapter.Fill(ds);
+            }
+            finally
+            {
+                conexao.Close();
+            }
+
+            return ds;
+        }
     }
 }

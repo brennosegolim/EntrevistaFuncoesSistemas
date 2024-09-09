@@ -11,11 +11,12 @@ $(document).ready(function () {
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
         $('#formCadastro #CPF').val(obj.CPF);
+        sessionStorage.setItem('idCliente', String(obj.Id));
     }
 
     $('#formCadastro').submit(function (e) {
+        debugger;
         e.preventDefault();
-        
         $.ajax({
             url: urlPost,
             method: "POST",
@@ -29,7 +30,7 @@ $(document).ready(function () {
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "CPF": $(this).find("#Telefone").val()
+                "CPF": somenteNumeros($(this).find("#Telefone").val())
             },
             error:
             function (r) {
@@ -41,8 +42,7 @@ $(document).ready(function () {
             success:
             function (r) {
                 ModalDialog("Sucesso!", r)
-                $("#formCadastro")[0].reset();                                
-                window.location.href = urlRetorno;
+                $("#formCadastro")[0].reset();
             }
         });
     })
