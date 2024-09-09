@@ -37,6 +37,11 @@ namespace WebAtividadeEntrevista.Controllers
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
             }
+            else if (!ValidaDigitoCPF.ValidaCPF(model.CPF))
+            {
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, "CPF Inválido"));
+            }
             else if (!boCliente.VerificarExistencia(model.CPF))
             {
 
@@ -71,6 +76,11 @@ namespace WebAtividadeEntrevista.Controllers
 
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
+            }
+            else if (!ValidaDigitoCPF.ValidaCPF(model.CPF))
+            {
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, "CPF Inválido"));
             }
             else if (!boCliente.VerificarExistencia(model.CPF))
             {
