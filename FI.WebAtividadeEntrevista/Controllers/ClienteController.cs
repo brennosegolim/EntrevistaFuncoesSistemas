@@ -86,7 +86,7 @@ namespace WebAtividadeEntrevista.Controllers
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, "CPF Inválido"));
             }
-            else if (!bo.VerificarExistencia(model.CPF))
+            else if(!bo.VerificarExistencia(model.CPF))
             {
                 bo.Alterar(new Cliente()
                 {
