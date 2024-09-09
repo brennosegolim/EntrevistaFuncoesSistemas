@@ -1,5 +1,6 @@
 ﻿
 $(document).ready(function () {
+    getNextID();
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -14,7 +15,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "CPF": somenteNumeros($(this).find("#CPF").val())
             },
             error:
             function (r) {
@@ -25,7 +27,7 @@ $(document).ready(function () {
             },
             success:
             function (r) {
-                ModalDialog("Sucesso!", r)
+                ModalDialog("Sucesso!", r.msg)
                 $("#formCadastro")[0].reset();
             }
         });
@@ -51,8 +53,26 @@ function ModalDialog(titulo, texto) {
         '                </div>                                                                                             ' +
         '            </div><!-- /.modal-content -->                                                                         ' +
         '  </div><!-- /.modal-dialog -->                                                                                    ' +
-        '</div> <!-- /.modal -->                                                                                        ';
+        '</div> <!-- /.modal -->                                                                                            ';
 
     $('body').append(texto);
     $('#' + random).modal('show');
+}
+
+function getNextID() {
+    $.ajax({
+        url: urlNextID,
+        method: "POST",
+        error:
+            function (r) {
+                if (r.status == 400)
+                    ModalDialog("Ocorreu um erro", r.responseJSON);
+                else if (r.status == 500)
+                    ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
+            },
+        success:
+            function (r) {
+                sessionStorage.setItem('idCliente', String(r.idCliente));
+            }
+    });
 }

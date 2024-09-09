@@ -3,11 +3,16 @@
     ViewBag.Title = "Alterar Cliente";
 }
 @section scripts{
-<script>
-        var urlPost = '@Url.Action("Alterar", "Cliente", new { area = "" })';
-        var obj = @Html.Raw(Json.Encode(Model));
-        var urlRetorno = '@Url.Action("Index", "Cliente", new { area = "" })';
-</script>
+    <script>
+        var urlPost        = '@Url.Action("Alterar", "Cliente", new { area = "" })';
+        var obj            = @Html.Raw(Json.Encode(Model));
+        var urlRetorno     = '@Url.Action("Index", "Cliente", new { area = "" })';
+        var urlPostBen     = '@Url.Action("Incluir", "Beneficiario", new { area = "" })';
+        var urlAltBen      = '@Url.Action("AlterarBeneficiario", "Beneficiario", new { area = "" })';
+        var urlAltConsBen  = '@Url.Action("AlterarConsulta", "Beneficiario", new { area = "" })';
+        var urlDelBen      = '@Url.Action("Excluir", "Beneficiario", new { area = "" })';
+        var urlListBen     = '@Url.Action("Listar", "Beneficiario", new { area = "" })';
+    </script>
     @Scripts.Render("~/bundles/altClientes")
 }
 <h2>@Html.Raw(ViewBag.Title)</h2>

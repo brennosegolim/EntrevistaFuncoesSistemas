@@ -67,5 +67,12 @@ namespace WebAtividadeEntrevista.Models
         /// </summary>
         public string Telefone { get; set; }
 
+        /// <summary>
+        /// Cadastro de Pessoa Física
+        /// </summary>
+        [Required]
+        [MaxLength(11)]
+        public string CPF { get; set; }
+
     }    
 }

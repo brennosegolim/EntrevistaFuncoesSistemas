@@ -26,7 +26,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Incluir(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-            
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -36,11 +36,15 @@ namespace WebAtividadeEntrevista.Controllers
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
             }
-            else
+            else if (!ValidaDigitoCPF.ValidaCPF(model.CPF))
             {
-                
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, "CPF Inválido"));
+            }
+            else if (!bo.VerificarExistencia(model.CPF))
+            {
                 model.Id = bo.Incluir(new Cliente()
-                {                    
+                {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
                     Email = model.Email,
@@ -49,11 +53,17 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = model.Nacionalidade,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
-                    Telefone = model.Telefone
+                    Telefone = model.Telefone,
+                    CPF = model.CPF
                 });
 
-           
-                return Json("Cadastro efetuado com sucesso");
+
+                return Json(new { id = model.Id, msg = "Cadastro efetuado com sucesso" });
+            }
+            else
+            {
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, "CPF já cadastrado"));
             }
         }
 
@@ -61,7 +71,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-       
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -71,7 +81,12 @@ namespace WebAtividadeEntrevista.Controllers
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
             }
-            else
+            else if(!ValidaDigitoCPF.ValidaCPF(model.CPF))
+            {
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, "CPF Inválido"));
+            }
+            else if (!bo.VerificarExistencia(model.CPF))
             {
                 bo.Alterar(new Cliente()
                 {
@@ -84,10 +99,17 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = model.Nacionalidade,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
-                    Telefone = model.Telefone
+                    Telefone = model.Telefone,
+                    CPF = model.CPF
                 });
-                               
+
+                Response.StatusCode = 200;
                 return Json("Cadastro alterado com sucesso");
+            }
+            else
+            {
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, "CPF já cadastrado"));
             }
         }
 
@@ -111,10 +133,11 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = cliente.Nacionalidade,
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
-                    Telefone = cliente.Telefone
+                    Telefone = cliente.Telefone,
+                    CPF = Convert.ToUInt64(cliente.CPF).ToString(@"000\.000\.000\-00")
                 };
 
-            
+
             }
 
             return View(model);
@@ -145,6 +168,37 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+
+        [HttpPost]
+        public JsonResult Excluir(long id)
+        {
+            BoCliente bo = new BoCliente();
+
+            if (!this.ModelState.IsValid)
+            {
+                List<string> erros = (from item in ModelState.Values
+                                      from error in item.Errors
+                                      select error.ErrorMessage).ToList();
+
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, erros));
+            }
+            else
+            {
+                bo.Excluir(id);
+
+                Response.StatusCode = 200;
+                return Json("Cliente excluído com sucesso");
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetNextID()
+        {
+            long idCliente = new BoCliente().GetNextID();
+
+            return Json(new { idCliente = idCliente});
         }
     }
 }
